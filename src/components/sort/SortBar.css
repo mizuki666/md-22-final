@@ -1,0 +1,29 @@
+.sort-bar {
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.sort-bar .sort-bar__btn:first-child{
+  border-radius: 10px 0px 0px 10px;
+  border-right: 0;
+}
+.sort-bar .sort-bar__btn:last-child{
+  border-radius: 0px 10px 10px 0px;
+  border-left: 0;
+}
+.sort-bar__btn{
+  height: 100%;
+  width: 100%;
+  padding: 20px 0px;
+  border-radius: 0;
+  border: 1px solid #4E148C;
+  background-color: #E8EBF2;
+  color: #4E148C;
+  outline: 0;
+}
+
+.sort-bar__btn_active{
+  color: #F7F9F7;
+  background-color: #4E148C;
+}

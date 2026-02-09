@@ -1,268 +1,344 @@
-# Мануал: приложение поиска авиабилетов (React + Redux Toolkit + TypeScript)
+# Финальный проект: Поиск авиабилетов — план оставшихся работ
 
-## Цель
-
-Приложение для поиска авиабилетов с:
-- фейковым API через **async-thunk**;
-- сортировкой по цене, длительности, количеству пересадок;
-- фильтрацией по авиакомпаниям и по количеству пересадок.
+В этом документе оставлены **только невыполненные/недоделанные** части ТЗ (то, что уже сделано — убрано).
 
 ---
 
-## 1. Чек-лист по критериям (10 баллов)
+## Что нужно доделать, чтобы закрыть ТЗ (короткий список)
 
-| Критерий | Баллы | Что нужно |
-|----------|--------|-----------|
-| Vite/CRA, `npm run dev` и `npm run build` работают | 2 | Добавить в `package.json` скрипт `"start": "vite"` для совместимости с формулировкой задания |
-| Redux Toolkit (не createStore, не connect/mapState/mapDispatch) | 2 | Store через `configureStore`, компоненты через `useSelector`/`useDispatch` или хуки из slice |
-| Адаптивная вёрстка по макету Figma | 2 | Стили под ПК и мобильные, проверка на разных ширинах |
-| Доп. методы RTK: createAsyncThunk, createEntityAdapter | +1 за каждый | У вас уже есть createAsyncThunk; добавить createEntityAdapter для списка билетов |
-| TypeScript | 2 | Типы для всех сущностей и пропсов |
+- **Привести фейковое API к корректному формату**: `public/tickets.json` должен быть **массивом** билетов, а не одним объектом (иначе `fetchTickets(): Promise<Ticket[]>` не соответствует факту).
+- **Доделать `ticketsSlice`**: сейчас в `src/store/slices/ticketsSlice.ts` используется `initialState`, но он **не объявлен** → нужно сделать adapter + `getInitialState`, добавить thunk/extraReducers/reducers/селекторы.
+- **Подключить Provider** в `src/main.tsx` (сейчас `<App />` рендерится без `Provider`).
+- **UI под ТЗ**: компоненты сортировки, фильтров, списка билетов и карточки билета + интеграция с Redux (хуки `useSelector`/`useDispatch`).
+- **Адаптив** (стили вы делаете сами) и финальная проверка `npm run dev` / `npm run build`.
 
 ---
 
-## 2. Пошаговая реализация
+## Этап 2 (доделать): `public/tickets.json` под `Ticket[]`
 
-### Шаг 1. Скрипты и типы
+Сейчас `public/tickets.json` — **один объект**, а должен быть **массив объектов** (минимум 5–10), чтобы:
 
-**1.1.** В `package.json` в `scripts` добавьте (если ещё нет):
+- `fetchTickets()` реально возвращал `Ticket[]`
+- было что сортировать/фильтровать (разные `company`, `price`, `duration`, `connectionAmount`)
 
-```json
-"start": "vite"
-```
+**Что сделать:**
 
-Чтобы проект «запускался с помощью npm start», как в задании.
+- Обернуть текущий объект в массив `[]`.
+- Добавить ещё несколько билетов (разные значения), обязательно с полями: `price`, `duration`, `connectionAmount`.
 
-**1.2.** Типы билета оставьте в одном месте — например только в `src/types/ticket.ts`. Интерфейс из задания:
+**Проверка:** `fetch('/tickets.json').then(r => r.json())` возвращает массив.
+---
+
+## Этап 3 (доделать) — пошагово: скелет slice + Provider
+
+Сейчас проект не собирается: в `ticketsSlice.ts` написано `initialState`, но такой переменной нет. И приложение не знает про Redux store, потому что в `main.tsx` нет `Provider`. Ниже — что делать **по шагам**, по одному действию.
+
+---
+
+### Шаг 3.1 — Открыть файл slice
+
+Открой файл **`src/store/slices/ticketsSlice.ts`**. Сейчас там есть `createSlice` и `initialState` без объявления — мы это исправим.
+
+---
+
+### Шаг 3.2 — Добавить adapter (хранилище билетов по id)
+
+**Зачем:** Redux Toolkit даёт `createEntityAdapter` — это способ хранить список сущностей (билетов) по их `id`. Позже мы будем класть сюда загруженные билеты.
+
+**Что написать** — сразу после импортов (после строки с `SortField`), **до** `const ticketsSlice = ...`:
 
 ```ts
-export interface TicketTime {
-  startTime: string;
-  endTime: string;
-}
-
-export interface Ticket {
-  id: number;
-  from: string;
-  to: string;
-  company: string;
-  price: number;
-  currency: 'RUB';
-  time: TicketTime;
-  duration: number;
-  date: string;
-  connectionAmount: number | null;
-}
-```
-
-Дополнительно можно хранить там же типы для сортировки и фильтров (SortField, SortOrder, Filters).
-
----
-
-### Шаг 2. Redux: store и slice
-
-**2.1. Store**
-
-Создайте `src/store/index.ts`:
-
-```ts
-import { configureStore } from '@reduxjs/toolkit';
-import ticketsReducer from './ticketsSlice';
-
-export const store = configureStore({
-  reducer: {
-    tickets: ticketsReducer,
-  },
+const ticketsAdapter = createEntityAdapter<Ticket>({
+  selectId: (ticket) => ticket.id,
 });
-
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
 ```
 
-**2.2. Slice с createAsyncThunk и (опционально) createEntityAdapter**
+То есть: создаём «адаптер» для типа `Ticket`, а ключ каждой записи — поле `id`.
 
-- В slice обрабатывайте экшены от `fetchTickets` и `fetchCompanies` через `extraReducers`.
-- Состояние: список билетов, список компаний, выбранные фильтры (компании, пересадки), поле и порядок сортировки, статус загрузки/ошибка.
+---
 
-Пример структуры состояния без adapter:
+### Шаг 3.3 — Описать тип «дополнительного» состояния
+
+**Зачем:** В slice хранятся не только билеты (их даёт adapter), но и флаги загрузки, ошибка, выбранная сортировка и фильтры. Эти поля мы описываем отдельным типом.
+
+**Что написать** — сразу после `ticketsAdapter`, **до** `initialState`:
 
 ```ts
-{
-  items: Ticket[],
-  companies: string[],
-  filters: { companies: string[], stops: number[] },
-  sortBy: SortField,
-  sortOrder: 'asc' | 'desc',
-  loading: boolean,
-  error: string | null
-}
+type TicketsExtraState = {
+  loading: boolean;
+  error: string | null;
+  sortBy: SortField;
+  stopsFilter: number[];
+  companiesFilter: string[];
+};
 ```
 
-Для получения балла за **createEntityAdapter**:
+Пока просто запомни: `loading` — идёт ли загрузка, `error` — текст ошибки (или null), `sortBy` — по чему сортировать, `stopsFilter` и `companiesFilter` — выбранные фильтры.
 
-- Используйте `createEntityAdapter<Ticket>()` для хранения билетов по `id`.
-- В `extraReducers` при `fetchTickets.fulfilled` вызывайте `adapter.setAll(state, action.payload)`.
-- Селекторы: `adapter.getSelectors()`, при необходимости комбинируйте с фильтрами/сортировкой в других селекторах.
+---
 
-**2.3. Подключение store в приложении**
+### Шаг 3.4 — Создать начальное состояние (initialState)
 
-В `src/main.tsx`:
+**Зачем:** В Redux у каждого reducer есть «начальное состояние». Мы берём начальное состояние от adapter и добавляем к нему наши поля.
 
-```tsx
-import { Provider } from 'react-redux';
-import { store } from './store';
+**Что написать** — сразу после типа `TicketsExtraState`:
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </StrictMode>,
-);
+```ts
+const initialState = ticketsAdapter.getInitialState<TicketsExtraState>({
+  loading: false,
+  error: null,
+  sortBy: 'price',
+  stopsFilter: [],
+  companiesFilter: [],
+});
 ```
 
-Без `Provider` Redux в приложении не работает.
+Итог: изначально билетов нет (adapter даёт пустые `ids` и `entities`), загрузки нет, ошибки нет, сортировка по цене, фильтры пустые (значит «показать всё»).
 
 ---
 
-### Шаг 3. Фейковое API (async-thunk)
+### Шаг 3.5 — Добавить хотя бы один reducer
 
-У вас уже есть `src/api/ticketApi.ts` с `createAsyncThunk`:
+**Зачем:** В `createSlice` поле `reducers` не может быть совсем пустым в TypeScript — иначе бывают ошибки типов. Поэтому добавляем один «пустой» reducer, который ничего не меняет. Позже сюда же добавим `setSortBy`, `setStopsFilter`, `setCompaniesFilter`.
 
-- `fetchTickets(params)` — возвращает билеты (с фильтрацией/сортировкой на стороне «API» или в селекторах — на ваш выбор).
-- `fetchCompanies()` — список компаний.
+**Что сделать:** В объекте `reducers` вместо только комментария добавь одну строку:
 
-Важно:
+```ts
+reducers: {
+  noop: (state) => state,
+},
+```
 
-- В slice при загрузке приложения (или при смене фильтров/сортировки) вызывать `dispatch(fetchTickets(...))` и `dispatch(fetchCompanies())`.
-- Параметры для `fetchTickets` брать из state (фильтры, sortBy, sortOrder), чтобы при смене фильтров/сортировки запрос шёл с актуальными параметрами.
-
-Формат данных должен поддерживать сортировку (у вас уже есть `price`, `duration`, `connectionAmount`).
-
----
-
-### Шаг 4. Фильтрация и сортировка
-
-**4.1. Фильтрация по пересадкам**
-
-- В state храните массив выбранных значений пересадок, например `stops: number[]` (0, 1, 2, «любое»).
-- В UI — чекбоксы/кнопки: «Без пересадок», «1 пересадка», «2 пересадки» и т.д.
-- При выборе обновляйте state и заново вызывайте `fetchTickets` с новым `stops` (или фильтруйте в селекторе из данных, полученных с «сервера»).
-
-**4.2. Фильтрация по авиакомпаниям**
-
-- В state храните массив выбранных компаний `companies: string[]`.
-- В UI — чекбоксы по списку компаний (список из `fetchCompanies`).
-- При изменении обновляйте state и снова запрашивайте билеты с параметром `companies`.
-
-**4.3. Сортировка**
-
-- В state: `sortBy: 'price' | 'duration' | 'connectionAmount'` и `sortOrder: 'asc' | 'desc'`.
-- В UI — переключатель (кнопки/селект): «Цена», «Время в пути», «Пересадки» и направление.
-- При смене обновляйте state и вызывайте `fetchTickets` с `sortBy` и `order`.
-
-Логику можно держать в thunk (как у вас сейчас) или отдавать с «сервера» все билеты и фильтровать/сортировать в селекторах — оба варианта допустимы.
+То есть action `noop` просто возвращает state без изменений. Имя можно любое, важно что reducer есть.
 
 ---
 
-### Шаг 5. Компоненты
+### Шаг 3.6 — Проверить, что slice экспортирует reducer
 
-**5.1. Список билетов**
+В конце файла уже есть:
 
-- Компонент (например, `TicketList`) получает из Redux список билетов через `useSelector` (напрямую или через селектор с фильтрацией/сортировкой).
-- Рендерит карточки билетов (отдельный компонент `Ticket` для одного билета).
-- В карточке: откуда/куда, компания, цена, время вылета/прилёта, длительность, дата, количество пересадок.
+```ts
+export const ticketsReducer = ticketsSlice.reducer;
+```
 
-**5.2. Боковая панель фильтров**
-
-- Компонент фильтров использует `useSelector` для списка компаний и текущих фильтров/сортировки, `useDispatch` для экшенов смены фильтров и сортировки.
-- При изменении чекбоксов/кнопок — диспатчить экшены, которые обновляют state и (в эффекте или в самом обработчике) вызывают `dispatch(fetchTickets(...))`.
-
-**5.3. Header**
-
-- Оставьте как есть или приведите в соответствие макету Figma.
+Ничего менять не нужно — просто убедись, что эта строка есть. Её импортирует `src/store/index.ts`.
 
 ---
 
-### Шаг 6. Адаптивная вёрстка
+### Итог по файлу `ticketsSlice.ts`
 
-- Сверстайте по макету Figma: сетка, отступы, шрифты, цвета.
-- Используйте медиа-запросы (`@media`) для мобильной версии: колонка фильтров сверху или в выдвижной панели, список билетов — одна колонка, удобные размеры кнопок и чекбоксов.
-- Проверьте запуск на ПК и на узкой ширине (мобильный вид).
+В итоге порядок в файле должен быть такой:
 
----
+1. Импорты (`createSlice`, `createEntityAdapter`, `Ticket`, `SortField`).
+2. `const ticketsAdapter = createEntityAdapter<Ticket>({ selectId: ... })`.
+3. `type TicketsExtraState = { ... }`.
+4. `const initialState = ticketsAdapter.getInitialState<TicketsExtraState>({ ... })`.
+5. `const ticketsSlice = createSlice({ name: 'tickets', initialState, reducers: { noop: ... } })`.
+6. `export const ticketsReducer = ticketsSlice.reducer`.
 
-### Шаг 7. TypeScript
-
-- Все пропсы компонентов опишите интерфейсами.
-- Redux: типизируйте `RootState`, `AppDispatch`, аргументы и результат thunk, типы в slice.
-- Избегайте `any`.
-
----
-
-## 3. Где вы ошиблись и что исправить
-
-### Критичные ошибки
-
-**1. Redux не подключён к приложению**
-
-- В `main.tsx` нет `Provider` и `store`. Даже при наличии `createAsyncThunk` в `ticketApi.ts` Redux не используется.
-- **Исправление:** создать store (`configureStore`), slice с `extraReducers` для thunk, в `main.tsx` обернуть `<App />` в `<Provider store={store}>`.
-
-**2. Нет slice и хранилища состояния**
-
-- Нет `createSlice`, нет состояния для билетов, компаний, фильтров и сортировки.
-- **Исправление:** один slice (например, `ticketsSlice`) с полями `items`, `companies`, `filters`, `sortBy`, `sortOrder`, `loading`, `error` и с `extraReducers` для `fetchTickets` и `fetchCompanies`. Для балла за createEntityAdapter храните билеты через `createEntityAdapter<Ticket>()`.
-
-**3. Компоненты не используют Redux**
-
-- Ни один компонент не вызывает `useSelector` или `useDispatch`. Фильтры и список билетов не связаны со state.
-- **Исправление:** в компоненте списка билетов — `useSelector` для списка билетов (и при необходимости loading/error); в компоненте фильтров — `useSelector` для компаний и текущих фильтров/сортировки, `useDispatch` для обновления фильтров и вызова `fetchTickets`/`fetchCompanies`.
-
-**4. Список билетов не отображается**
-
-- В `App.tsx` вместо списка билетов заглушка «райт зон» (очевидная опечатка).
-- **Исправление:** вывести компонент списка билетов (например, `<TicketList />`), который берёт данные из Redux и рендерит карточки. Компонент `Ticket` сейчас пустой — нужно реализовать разметку одной карточки (from, to, company, price, time, duration, connectionAmount).
-
-**5. Компонент фильтров не реализует фильтрацию**
-
-- `filter.tsx` только выводит три строки (head, text, content) без разметки и без привязки к state. Нет чекбоксов по компаниям, по пересадкам, нет переключателя сортировки.
-- **Исправление:** добавить UI для выбора компаний (из Redux), пересадок и типа/порядка сортировки; по клику диспатчить экшены и при необходимости вызывать `fetchTickets` с актуальными параметрами.
-
-### Дополнительные замечания
-
-**6. Дублирование типов**
-
-- Интерфейс `Ticket` описан и в `src/types/ticket.ts`, и в `src/components/tickets/interface/ticket.ts`.
-- **Исправление:** оставить один источник истины (например, `src/types/ticket.ts`) и везде импортировать оттуда. Второй файл можно удалить или реэкспортировать из types.
-
-**7. Опечатка в имени интерфейса**
-
-- В `filter.tsx`: `SelctorsFilter` → лучше `SelectorsFilter` или, по смыслу, `FilterProps`.
-
-**8. Скрипт запуска**
-
-- В задании указано «запускается с помощью npm start или npm run dev». В `package.json` есть только `dev`. Для однозначного соответствия критерию добавьте `"start": "vite"`.
-
-**9. createEntityAdapter не используется**
-
-- Для дополнительного балла нужен `createEntityAdapter` для массива билетов. Сейчас массив хранится «как есть». Добавьте adapter в slice и используйте `setAll`/`getSelectors()`.
-
-**10. Стили**
-
-- `filter.css` с `background: red` — явно черновой вариант; привести к макету Figma.
+Сохрани файл и проверь: в терминале выполни `npm run build`. Ошибок быть не должно (по крайней мере не из‑за `initialState`).
 
 ---
 
-## 4. Порядок внедрения (кратко)
+### Шаг 3.7 — Подключить Provider в main.tsx
 
-1. Добавить `"start": "vite"` в `package.json`.
-2. Создать store и slice (с extraReducers для fetchTickets и fetchCompanies), при желании — с createEntityAdapter.
-3. Подключить `Provider` в `main.tsx`.
-4. Реализовать компонент карточки билета и список билетов с `useSelector`.
-5. Доработать компонент фильтров: UI + `useDispatch`/`useSelector`, вызов `fetchTickets` при смене параметров.
-6. В `App.tsx` вывести список билетов вместо «райт зон».
-7. Унифицировать типы (один файл для Ticket).
-8. Сверстать по макету и проверить адаптив.
+**Зачем:** Store у тебя уже создан в `src/store/index.ts`, но React о нём не знает. Чтобы компоненты могли читать state и вызывать actions через `useSelector` и `useDispatch`, всё приложение нужно обернуть в компонент **`Provider`** из `react-redux` и передать ему `store`.
 
-После этого проект будет соответствовать критериям: Vite, Redux Toolkit без legacy API, createAsyncThunk (и при желании createEntityAdapter), TypeScript и адаптивная вёрстка по макету.
+**Что сделать** — открыть **`src/main.tsx`** и изменить так:
+
+1. **Добавить импорты** в начало файла (рядом с существующими):
+   ```ts
+   import { Provider } from 'react-redux';
+   import { store } from './store';
+   ```
+
+2. **Обернуть `<App />` в `<Provider>`:**  
+   Было:
+   ```tsx
+   createRoot(document.getElementById('root')!).render(
+     <StrictMode>
+       <App />
+     </StrictMode>,
+   );
+   ```
+   Стало:
+   ```tsx
+   createRoot(document.getElementById('root')!).render(
+     <StrictMode>
+       <Provider store={store}>
+         <App />
+       </Provider>
+     </StrictMode>,
+   );
+   ```
+
+Сохрани файл.
+
+---
+
+### Шаг 3.8 — Проверка
+
+1. В терминале: **`npm run dev`** — приложение должно запуститься без ошибок.
+2. В браузере открой приложение. Если ставил расширение Redux DevTools — открой его и посмотри state: должна быть ветка **`tickets`** с полями `ids`, `entities`, `loading`, `error`, `sortBy`, `stopsFilter`, `companiesFilter`.
+
+Если всё так — этап 3 выполнен. Дальше в этапе 4 в этот же slice добавим загрузку билетов (thunk), смену сортировки/фильтров (reducers) и селектор для списка на экране.
+
+---
+
+## Этап 4. Slice: thunk, reducers и селектор (добавить в тот же ticketsSlice)
+
+**Цель:** в уже созданный на этапе 3 slice добавить загрузку билетов через **createAsyncThunk**, обновление фильтров/сортировки через **reducers** и производный **селектор** для отображаемого списка. Структура state и adapter уже есть (этап 3), меняем только файл `ticketsSlice.ts`.
+
+**Зависимости:** этапы 1, 2, 3 (типы, API `fetchTickets`, store с slice-скелетом и Provider).
+
+**Проверка:** диспатч thunk загружает билеты в state; смена sortBy и фильтров через actions меняет результат `selectFilteredAndSortedTickets`. Временно в App можно вывести `useSelector(selectFilteredAndSortedTickets).length`.
+
+**Статус в проекте:** в slice пока только скелет — этот этап в работе.
+
+### Что добавить в `src/store/slices/ticketsSlice.ts`
+
+1. **Импорты**
+   - `createAsyncThunk`, `PayloadAction` из `@reduxjs/toolkit`.
+   - `fetchTickets` из `../../api/ticketsApi` (или по вашему пути).
+   - `RootState` из `../index` (для селекторов).
+
+2. **createAsyncThunk**
+   - Thunk с типом `createAsyncThunk<Ticket[], void>('tickets/fetchTickets', () => fetchTickets())`.
+   - В `createSlice` добавить `extraReducers(builder => { ... })`:
+     - `fetchTickets.pending`: `state.loading = true`, `state.error = null`.
+     - `fetchTickets.fulfilled`: `ticketsAdapter.setAll(state, action.payload)`, `state.loading = false`.
+     - `fetchTickets.rejected`: `state.loading = false`, `state.error = action.error.message ?? 'Ошибка загрузки'` (или привести к строке).
+
+3. **Reducers (добавить в существующий объект reducers)**
+   - `setSortBy(state, action: PayloadAction<SortField>)` → `state.sortBy = action.payload`.
+   - `setStopsFilter(state, action: PayloadAction<number[]>)` → `state.stopsFilter = action.payload`.
+   - `setCompaniesFilter(state, action: PayloadAction<string[]>)` → `state.companiesFilter = action.payload`.
+   - Экспорт actions: `export const { setSortBy, setStopsFilter, setCompaniesFilter } = ticketsSlice.actions` (и при необходимости экспорт thunk по имени для диспатча).
+
+4. **Селекторы**
+   - Базовые от adapter:  
+     `const ticketsSelectors = ticketsAdapter.getSelectors((state: RootState) => state.tickets);`  
+     при необходимости экспортировать `ticketsSelectors.selectAll`, `ticketsSelectors.selectById`.
+   - Производный селектор `selectFilteredAndSortedTickets(state: RootState): Ticket[]`:
+     - взять все билеты: `const all = ticketsSelectors.selectAll(state)` (или `ticketsAdapter.getSelectors(...).selectAll(state)`);
+     - если `state.tickets.stopsFilter.length > 0` — оставить билеты, у которых `connectionAmount` входит в `stopsFilter` (значение `null` считать как 0 пересадок, если так в ТЗ);
+     - если `state.tickets.companiesFilter.length > 0` — оставить билеты, у которых `company` входит в `companiesFilter`;
+     - отсортировать массив по `state.tickets.sortBy`: по полям `price`, `duration` или `connectionAmount` (для `null` задать правило, например считать как 0);
+     - вернуть массив.
+   - Селектор экспортировать и использовать в компонентах списка билетов (этап 6).
+
+---
+
+## Этап 5. Компоненты: сортировка и фильтры (левая колонка)
+
+**Цель:** пользователь может выбрать способ сортировки и фильтры; изменения пишутся в Redux, список билетов (этап 6) сам подстроится через селектор.
+
+**Зависимости:** этап 4 (actions и state в slice).
+
+**Что сделать:**
+
+1. **Блок сортировки** (например `src/components/sort/SortBar.tsx` или внутри одного компонента фильтров):
+   - Три варианта: «Цена», «Время в пути», «Пересадки» (соответствуют `SortField`).
+   - По клику диспатчить `setSortBy('price' | 'duration' | 'connectionAmount')`.
+   - Данные из store: `useSelector(state => state.tickets.sortBy)` для подсветки выбранного.
+
+2. **Фильтр пересадок:**
+   - Чекбоксы: «Без пересадок», «1 пересадка», «2», «3 и более» (значения 0, 1, 2, 3 или как у вас в типах).
+   - Клик — диспатч `setStopsFilter` с обновлённым массивом выбранных значений (добавить/удалить число).
+
+3. **Фильтр авиакомпаний:**
+   - Список компаний: уникальные `company` из билетов. Варианты: селектор, который по `selectAll` возвращает уникальные компании, или хранить список компаний в state при загрузке.
+   - Чекбоксы по компаниям — диспатч `setCompaniesFilter` с массивом выбранных названий.
+
+4. В `App.tsx` в левую колонку (первый `<section>`) вставить блок сортировки и оба блока фильтров.
+
+**Проверка:** переключение сортировки и фильтров не даёт ошибок; в Redux DevTools видно смену `sortBy`, `stopsFilter`, `companiesFilter`.
+
+**Статус в проекте:** компонентов filter/sort нет — этап в работе.
+
+---
+
+## Этап 6. Компоненты: список билетов и карточка билета (правая колонка)
+
+**Цель:** отобразить загруженные билеты с учётом фильтров и сортировки; показывать загрузку и ошибку.
+
+**Зависимости:** этап 4 (селектор `selectFilteredAndSortedTickets`), этап 5 не обязателен для отображения (можно проверить без фильтров).
+
+**Что сделать:**
+
+1. **Список билетов** (например `src/components/tickets/TicketList.tsx`):
+   - `useSelector(selectFilteredAndSortedTickets)` — массив для отображения.
+   - `useSelector(state => state.tickets.loading)` и `state.tickets.error`.
+   - Если `loading` — показать скелетон/лоадер.
+   - Если `error` — показать сообщение об ошибке.
+   - Иначе — мапить массив в компонент карточки билета.
+   - При монтировании диспатчить thunk загрузки билетов (один раз, например в `useEffect` или при первом открытии страницы).
+
+2. **Карточка билета** (например `src/components/tickets/TicketCard.tsx`):
+   - Props: объект `Ticket`.
+   - Отобразить: `from`, `to`, `company`, `price`, `currency`, `time.startTime` / `time.endTime`, `duration`, `date`, `connectionAmount` (текстом: «Без пересадок», «1 пересадка», «2 пересадки» и т.д.). При желании форматировать время через date-fns.
+
+3. В `App.tsx` во вторую колонку (второй `<section>`) вставить список билетов.
+
+**Проверка:** после загрузки отображаются билеты; при смене сортировки/фильтров список обновляется; при загрузке виден индикатор, при ошибке — сообщение.
+
+**Статус в проекте:** компонентов tickets нет — этап в работе.
+
+---
+
+## Этап 7. Сборка layout и первый полный прогон
+
+**Цель:** левая колонка (сортировка + фильтры) и правая (список билетов) собраны в App; загрузка при старте; всё взаимодействует через Redux.
+
+**Зависимости:** этапы 4, 5, 6.
+
+**Что сделать:**
+
+1. Убедиться, что в `App.tsx`:
+   - Левая колонка: блок сортировки + фильтр пересадок + фильтр авиакомпаний.
+   - Правая колонка: список билетов (с загрузкой и ошибкой).
+2. При первом открытии приложения диспатчится thunk загрузки (в списке билетов или в App).
+3. Проверить: сортировка по цене/времени/пересадкам меняет порядок; фильтры по пересадкам и компаниям сужают список.
+
+**Проверка:** сценарий «открыл приложение → увидел билеты → поменял сортировку → включил/выключил фильтры» работает без ошибок.
+
+---
+
+## Этап 8. Адаптивная вёрстка
+
+**Цель:** соответствие макету Figma, корректная работа на ПК и на мобильных.
+
+**Зависимости:** этап 7 (вся логика и разметка на месте).
+
+**Что сделать:**
+
+1. Сверстать по макету: блоки, порядок, отступы (стили настраиваете сами).
+2. ПК: sidebar слева, список справа (как в текущей разметке).
+3. Мобильные: колонки в столбик; фильтры/сортировка доступны (аккордеон, выезжающая панель или отдельный блок — по макету).
+4. Проверить при разных ширинах: layout не ломается, элементы читаемы и кликабельны.
+
+**Проверка:** вид на десктопе и на узком экране соответствует требованиям и макету.
+
+---
+
+## Чек-лист перед сдачей
+
+- [ ] `npm run dev` — приложение открывается и работает.
+- [ ] `npm run build` — сборка без ошибок.
+- [ ] Только Redux Toolkit: `configureStore`, нет `createStore`, нет `connect`/`mapStateToProps`/`mapDispatchToProps`.
+- [ ] Используются `createAsyncThunk` (загрузка билетов) и `createEntityAdapter` (массив билетов в slice).
+- [ ] Сортировка по цене, длительности, пересадкам работает.
+- [ ] Фильтр по пересадкам и по авиакомпаниям работают.
+- [ ] Типы TypeScript заданы для store, API и компонентов.
+- [ ] Вёрстка соответствует макету и корректна на ПК и мобильных.
+- [ ] Репозиторий на GitHub публичный, в нём готовое решение.
+
+---
+
+## Порядок оставшихся этапов (кратко)
+
+1. **Исправить данные** — `public/tickets.json` сделать массивом `Ticket[]` и добавить достаточно билетов для тестов.
+2. **Довести до запуска** — починить `ticketsSlice` (adapter + `initialState`) и подключить `Provider` в `main.tsx`.
+3. **Реализовать требования ТЗ в slice** — `createAsyncThunk` (загрузка), `createEntityAdapter` (хранение), reducers для сортировки/фильтров, селектор для выдачи списка.
+4. **Собрать UI** — сортировка, фильтры, список билетов, карточка билета (все через хуки RTK).
+5. **Адаптив + финальная проверка** — сверстать под Figma и проверить `npm run dev` / `npm run build`.

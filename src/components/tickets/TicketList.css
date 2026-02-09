@@ -1,0 +1,15 @@
+.ticket-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.ticket-list_loading,
+.ticket-list_error,
+.ticket-list_empty {
+  padding: 1.5rem;
+  text-align: center;
+  color: #666;
+}
+.ticket-list_error {
+  color: #c00;
+}

@@ -1,0 +1,33 @@
+.ticket-card {
+  background: #E8EBF2;
+  color: #4E148C;
+}
+.ticket-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.ticket-card__price {
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+.ticket-card__company {
+  color: #666;
+}
+.ticket-card__route {
+  display: grid;
+  gap: 0.5rem;
+}
+.ticket-card__segment {
+  display: flex;
+  justify-content: space-between;
+}
+.ticket-card__label {
+  color: #666;
+}
+.ticket-card__date {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}

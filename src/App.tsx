@@ -1,24 +1,26 @@
-import './App.css'
-import Header from './components/header/header'
-import Filters from './components/filter/filter'
+import './App.css';
+import Header from './components/header/header';
+import SortBar from './components/sort/SortBar';
+import StopsFilter from './components/filter/StopsFilter';
+import CompaniesFilter from './components/filter/CompaniesFilter';
+import TicketList from './components/tickets/TicketList';
 
 function App() {
-
   return (
     <div className="app">
-      <Header/>
+      <Header />
       <main className="main-content">
-        <section>
-        <Filters 
-          head="Найдите лучшие рейсы"
-          text="Выберите параметры поиска"
-          content="Укажите даты и направления"
-        />
+        <aside className="sidebar">
+          <StopsFilter />
+          <CompaniesFilter />
+        </aside>
+        <section className="content">
+          <SortBar />
+          <TicketList />
         </section>
-        <section>райт зон</section>
       </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

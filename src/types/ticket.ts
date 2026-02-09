@@ -17,9 +17,4 @@ export interface Ticket {
 }
 
 export type SortField = 'price' | 'duration' | 'connectionAmount';
-export type SortOrder = 'asc' | 'desc';
-
-export interface Filters {
-    companies: string[];
-    stops: number[];
-}
+export type TicketsResponse = Ticket[];
