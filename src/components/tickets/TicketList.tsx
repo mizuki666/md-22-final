@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTicketsThunk } from '../../store/slices/ticketsSlice';
 import { selectFilteredAndSortedTickets } from '../../store/selectors/tickets';
@@ -98,16 +98,39 @@ export default function TicketList() {
     : tickets.slice(0, INITIAL_TICKETS_COUNT);
   const hasMoreTickets = tickets.length > INITIAL_TICKETS_COUNT;
 
-  useEffect(() => {
-    updateScrollState();
+  // Используем useLayoutEffect вместо useEffect для синхронных обновлений DOM
+  useLayoutEffect(() => {
+    // Обернем вызов в requestAnimationFrame для асинхронности
+    const rafId = requestAnimationFrame(() => {
+      updateScrollState();
+    });
+    
     const el = scrollRef.current;
     const wrap = wrapRef.current;
     if (!el || !wrap) return;
-    const ro = new ResizeObserver(updateScrollState);
+    
+    const ro = new ResizeObserver(() => {
+      // И здесь тоже используем requestAnimationFrame
+      requestAnimationFrame(() => {
+        updateScrollState();
+      });
+    });
+    
     ro.observe(el);
     ro.observe(wrap);
-    return () => ro.disconnect();
+    
+    return () => {
+      cancelAnimationFrame(rafId);
+      ro.disconnect();
+    };
   }, [displayedTickets.length, updateScrollState]);
+
+  // Также обновим обработчик scroll события
+  const handleScroll = useCallback(() => {
+    requestAnimationFrame(() => {
+      updateScrollState();
+    });
+  }, [updateScrollState]);
 
   const lineSvg =
     scrollState.trackHeight > 0
@@ -135,7 +158,7 @@ export default function TicketList() {
       <div
         className="ticket-list-scroll"
         ref={scrollRef}
-        onScroll={updateScrollState}
+        onScroll={handleScroll} // Используем обернутый обработчик
       >
         <ul className="ticket-list">
           {displayedTickets.map((ticket) => (

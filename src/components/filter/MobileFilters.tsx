@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '../../store';
 import StopsFilter from './StopsFilter';
 import CompaniesFilter from './CompaniesFilter';
-import { STOP_OPTIONS } from './StopsFilter';
+import {STOP_OPTIONS} from '../../constants/stopFilter'
 import './filter.css';
 import './MobileFilters.css';
 
