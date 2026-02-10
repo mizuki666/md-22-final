@@ -5,7 +5,7 @@
 @media (max-width: 1000px) {
   .mobile-filters {
     display: block;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     border-radius: 10px;
     overflow: hidden;
     background: #4E148C;

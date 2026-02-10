@@ -154,6 +154,12 @@
   }
 }
 
+@media (width <= 1000px) {
+  .ticket-list-scroll {
+    padding: 0px
+  }
+}
+
 @media (width <= 555px) {
   .ticket-list-scroll{
     padding: 0px;
