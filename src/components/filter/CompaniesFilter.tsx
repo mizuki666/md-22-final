@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCompaniesFilter } from '../../store/slices/ticketsSlice';
 import { selectUniqueCompanies } from '../../store/selectors/tickets';
 import type { RootState } from '../../store';
-import './Filter.css';
+import './filter.css';
 
 export default function CompaniesFilter() {
   const dispatch = useDispatch();

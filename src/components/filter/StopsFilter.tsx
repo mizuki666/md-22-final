@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { setStopsFilter } from '../../store/slices/ticketsSlice';
 import type { RootState } from '../../store';
-import './Filter.css';
+import './filter.css';
 
 const STOP_OPTIONS: { value: number; label: string }[] = [
   { value: 0, label: 'Без пересадок' },

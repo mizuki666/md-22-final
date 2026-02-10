@@ -1,6 +1,9 @@
 .ticket-card {
   background: #E8EBF2;
   color: #4E148C;
+  margin: 20px 0px;
+  padding: 10px;
+  border-radius: 10px;
 }
 .ticket-card__header {
   display: flex;
