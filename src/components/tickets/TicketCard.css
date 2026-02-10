@@ -58,7 +58,7 @@
   white-space: nowrap;
 }
 
-@media (width <= 450px) {
+@media (width <= 555px) {
   .ticket-card {
     margin: 0.5rem 0;
     padding: 1rem;

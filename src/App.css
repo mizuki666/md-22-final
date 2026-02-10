@@ -28,7 +28,7 @@
   height: fit-content;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
   .app {
     padding: 0 10px;
     min-height: 100dvh;
@@ -51,7 +51,7 @@
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1000px) {
   .content .mobile-filters {
     display: none;
   }

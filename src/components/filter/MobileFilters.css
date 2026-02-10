@@ -2,7 +2,7 @@
   display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
   .mobile-filters {
     display: block;
     margin-bottom: 1rem;
@@ -84,7 +84,7 @@
   }
 }
 
-@media (width <= 450px) {
+@media (width <= 555px) {
   .mobile-filters__summary,
   .mobile-filters__action {
     font-size: 0.8rem;

@@ -129,7 +129,7 @@
   opacity: 0.9;
 }
 
-@media (width <= 768px) {
+@media (width <= 1000px) {
   .ticket-list-wrap {
     position: relative;
     display: flex;
@@ -154,7 +154,7 @@
   }
 }
 
-@media (width <= 450px) {
+@media (width <= 555px) {
   .ticket-list-scroll{
     padding: 0px;
   }

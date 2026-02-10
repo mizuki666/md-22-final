@@ -6,7 +6,7 @@
     margin-top: 10px;
 }
 
-@media (width <= 768px) {
+@media (width <= 1000px) {
     .header-content{
         display: flex;
         color: #4E148C;
