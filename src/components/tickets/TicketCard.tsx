@@ -31,6 +31,7 @@ export default function TicketCard({ ticket }: TicketCardProps) {
         <span className="ticket-card__price">
           {price.toLocaleString('ru-RU')} {currency}
         </span>
+        <span style={{ opacity: 0 }}></span>
         <span className="ticket-card__company">
           {logo ? (
             <img src={logo} alt={company} className="ticket-card__logo" />

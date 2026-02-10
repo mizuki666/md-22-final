@@ -4,22 +4,19 @@
   margin: 10px 0px;
   padding: 30px;
   border-radius: 10px;
+  padding-right: 0;
 }
 .ticket-card__header {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
   margin-bottom: 1rem;
 }
 .ticket-card__price {
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: 2rem;
 }
-.ticket-card__company {
-  color: #666;
-  display: flex;
-  align-items: center;
-}
+
 .ticket-card__logo {
   height: 28px;
   width: auto;
@@ -36,10 +33,14 @@
   flex-direction: column;
 }
 .ticket-card__label {
-  color: #666;
+  color: #858AE3;
 }
 .ticket-card__date {
   margin-top: 0.5rem;
   font-size: 0.9rem;
   color: #666;
+}
+.ticket-card__time{
+  font-weight: 500;
+  color: #4E148C;
 }
