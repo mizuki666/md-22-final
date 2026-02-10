@@ -152,3 +152,9 @@
     -moz-osx-font-smoothing: grayscale;
   }
 }
+
+@media (width <= 450px) {
+  .ticket-list-scroll{
+    padding: 0px;
+  }
+}

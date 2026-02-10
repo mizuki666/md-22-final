@@ -27,3 +27,14 @@
   color: #F7F9F7;
   background-color: #4E148C;
 }
+
+@media (width <= 450px) {
+  .sort-bar{
+      font-size: 10px;
+      word-wrap: break-word;
+      margin-bottom: 7px;
+  }
+  .sort-bar__btn{
+    padding: 10px 0px;
+  }
+}

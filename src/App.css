@@ -35,6 +35,7 @@
   .main-content {
     flex-direction: column;
     max-height: 90dvh;
+    overflow: hidden;
   }
   .sidebar {
     display: none;

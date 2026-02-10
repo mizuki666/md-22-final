@@ -44,3 +44,35 @@
   font-weight: 500;
   color: #4E148C;
 }
+
+@media (width <= 450px) {
+  .ticket-list-scroll{
+    padding: 0px;
+  }
+  /*чекаем отседа*/
+  .ticket-card {
+    margin: 0.5rem 0px;
+    padding: 1rem;
+  }
+  .ticket-card__header {
+    grid-template-columns: 2fr 1fr 1fr;
+    margin-bottom: 1rem;
+  }
+  .ticket-card__price {
+    font-size: 1.5rem;
+  }
+  
+  .ticket-card__logo {
+    height: 1rem;
+  }
+  .ticket-card__route {
+    gap: 0.2rem;
+  }
+  .ticket-card__date {
+    margin-top: 0.1rem;
+    font-size: 0.9rem;
+  }
+  .ticket-card__time{
+    font-size: 0.8rem;
+  }
+}
