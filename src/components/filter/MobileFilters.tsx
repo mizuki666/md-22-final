@@ -51,8 +51,8 @@ export default function MobileFilters() {
         role="region"
         aria-labelledby="mobile-filters-trigger"
       >
-        <StopsFilter />
         <CompaniesFilter />
+        <StopsFilter />
       </div>
     </div>
   );

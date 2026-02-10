@@ -2,7 +2,7 @@
   display: none;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .mobile-filters {
     display: block;
     margin-bottom: 1rem;
@@ -54,11 +54,18 @@
   }
 
   .mobile-filters__panel {
+    position: absolute;
     overflow: hidden;
+    display: flex;
+    width: 100%;
+    background: #4E148C;
     max-height: 0;
     opacity: 0;
     transition: max-height 0.3s ease, opacity 0.2s ease, margin 0.2s ease;
     margin-top: 0;
+    z-index: 100;
+    flex: 1;
+    color: #F7F9F7;
   }
 
   .mobile-filters__panel_open {
@@ -69,6 +76,8 @@
 
   .mobile-filters__panel .filter {
     margin-bottom: 1rem;
+    border-radius: 0;
+    background: transparent
   }
 
   .mobile-filters__panel .filter:last-child {
