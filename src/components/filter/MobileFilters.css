@@ -1,0 +1,77 @@
+.mobile-filters {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .mobile-filters {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .mobile-filters__trigger {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: #E8EBF2;
+    border: 1px solid #d0d5dd;
+    border-radius: 10px;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .mobile-filters__trigger:hover {
+    background: #dfe2e9;
+  }
+
+  .mobile-filters__summary {
+    font-size: 0.9rem;
+    color: #374151;
+  }
+
+  .mobile-filters__action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #1f2937;
+  }
+
+  .mobile-filters__arrow {
+    display: inline-block;
+    transition: transform 0.2s ease;
+    font-size: 0.75rem;
+  }
+
+  .mobile-filters__arrow_open {
+    transform: rotate(180deg);
+  }
+
+  .mobile-filters__panel {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.2s ease, margin 0.2s ease;
+    margin-top: 0;
+  }
+
+  .mobile-filters__panel_open {
+    max-height: 600px;
+    opacity: 1;
+    margin-top: 0.75rem;
+  }
+
+  .mobile-filters__panel .filter {
+    margin-bottom: 1rem;
+  }
+
+  .mobile-filters__panel .filter:last-child {
+    margin-bottom: 0;
+  }
+}

@@ -3,6 +3,7 @@ import Header from './components/header/header';
 import SortBar from './components/sort/SortBar';
 import StopsFilter from './components/filter/StopsFilter';
 import CompaniesFilter from './components/filter/CompaniesFilter';
+import MobileFilters from './components/filter/MobileFilters';
 import TicketList from './components/tickets/TicketList';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         </aside>
         <section className="content">
           <SortBar />
+          <MobileFilters />
           <TicketList />
         </section>
       </main>

@@ -29,11 +29,17 @@
   height: fit-content;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .main-content {
     flex-direction: column;
   }
   .sidebar {
-    width: 100%;
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .content .mobile-filters {
+    display: none;
   }
 }

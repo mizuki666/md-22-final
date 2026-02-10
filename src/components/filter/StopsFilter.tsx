@@ -3,7 +3,7 @@ import { setStopsFilter } from '../../store/slices/ticketsSlice';
 import type { RootState } from '../../store';
 import './filter.css';
 
-const STOP_OPTIONS: { value: number; label: string }[] = [
+export const STOP_OPTIONS: { value: number; label: string }[] = [
   { value: 0, label: 'Без пересадок' },
   { value: 1, label: '1 пересадка' },
   { value: 2, label: '2 пересадки' },
