@@ -154,30 +154,31 @@ export default function TicketList() {
           </button>
         )}
       </div>
-      <div
-        className="ticket-list-track"
-        aria-hidden
-        style={
-          lineSvg
-            ? {
-                maskImage: `url("data:image/svg+xml,${lineSvg}")`,
-                WebkitMaskImage: `url("data:image/svg+xml,${lineSvg}")`,
-              }
-            : undefined
-        }
-      >
-        <div className="ticket-list-track-line" />
+      {scrollState.thumbVisible && (
         <div
-          className="ticket-list-thumb"
-          data-hidden={!scrollState.thumbVisible}
+          className="ticket-list-track"
+          aria-hidden
           style={
-            {
-              '--fd-top': `${scrollState.thumbTop}px`,
-              '--fd-height': `${scrollState.thumbHeight}px`,
-            } as React.CSSProperties
+            lineSvg
+              ? {
+                  maskImage: `url("data:image/svg+xml,${lineSvg}")`,
+                  WebkitMaskImage: `url("data:image/svg+xml,${lineSvg}")`,
+                }
+              : undefined
           }
-        />
-      </div>
+        >
+          <div className="ticket-list-track-line" />
+          <div
+            className="ticket-list-thumb"
+            style={
+              {
+                '--fd-top': `${scrollState.thumbTop}px`,
+                '--fd-height': `${scrollState.thumbHeight}px`,
+              } as React.CSSProperties
+            }
+          />
+        </div>
+      )}
     </div>
   );
 }
