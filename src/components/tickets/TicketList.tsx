@@ -6,27 +6,36 @@ import type { RootState, AppDispatch } from '../../store';
 import TicketCard from './TicketCard';
 import './TicketList.css';
 
-function buildTocLineSvg(height: number): string {
-  const points: [number, number][] = [];
-  let x = 1;
-  let y = 12;
-  const stepV = 20;
-  const stepH = 12;
-  const xRight = 11;
+const STEP_V = 20;
+const STEP_H = 12;
+const X_LEFT = 1;
+const X_RIGHT = 11;
+const Y_START = 12;
 
+/** Точки ступенчатой линии от 0 до height (как в Fumadocs) */
+function getSteppedPathPoints(height: number): [number, number][] {
+  const points: [number, number][] = [];
+  let x = X_LEFT;
+  let y = Y_START;
   points.push([x, y]);
   while (y < height) {
-    y += stepV;
+    y += STEP_V;
     if (y > height) break;
     points.push([x, y]);
-    x = x === 1 ? xRight : 1;
-    y += stepH;
+    x = x === X_LEFT ? X_RIGHT : X_LEFT;
+    y += STEP_H;
     if (y > height) break;
     points.push([x, y]);
   }
   if (points[points.length - 1][1] < height) {
     points.push([points[points.length - 1][0], height]);
   }
+  return points;
+}
+
+/** Генерирует SVG пути ступенчатой линии (как в Fumadocs) для любой высоты */
+function buildTocLineSvg(height: number): string {
+  const points = getSteppedPathPoints(height);
   const d = 'M' + points.map(([px, py]) => `${px} ${py}`).join(' L');
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 ${height}"><path d="${d}" stroke="black" stroke-width="1" fill="none"/></svg>`;
   return encodeURIComponent(svg);
