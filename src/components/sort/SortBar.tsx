@@ -21,7 +21,13 @@ export default function SortBar() {
             key={value}
             type="button"
             className={`sort-bar__btn ${sortBy === value ? 'sort-bar__btn_active' : ''}`}
-            onClick={() => dispatch(setSortBy(value))}
+            onClick={() => {
+              dispatch(setSortBy(value));
+              setTimeout(() => {
+                const scrollEl = document.querySelector('.ticket-list-scroll');
+                scrollEl?.scrollTo({ top: 0, behavior: 'smooth' });
+              }, 0);
+            }}
           >
             {label}
           </button>
