@@ -105,3 +105,26 @@
 .ticket-list_error {
   color: #c00;
 }
+
+.ticket-list__load-more {
+  display: block;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  font: inherit;
+  font-size: 0.95rem;
+  color: #fff;
+  background: var(--fd-primary, #4E148C);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.ticket-list__load-more:hover {
+  background: #3d0f6d;
+}
+
+.ticket-list__load-more:active {
+  opacity: 0.9;
+}

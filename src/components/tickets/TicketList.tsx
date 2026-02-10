@@ -6,6 +6,7 @@ import type { RootState, AppDispatch } from '../../store';
 import TicketCard from './TicketCard';
 import './TicketList.css';
 
+const INITIAL_TICKETS_COUNT = 3;
 const STEP_V = 20;
 const STEP_H = 12;
 const X_LEFT = 1;
@@ -47,6 +48,7 @@ export default function TicketList() {
   const loading = useSelector((state: RootState) => state.tickets.loading);
   const error = useSelector((state: RootState) => state.tickets.error);
 
+  const [showAllTickets, setShowAllTickets] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const [scrollState, setScrollState] = useState({
@@ -91,6 +93,11 @@ export default function TicketList() {
     dispatch(fetchTicketsThunk());
   }, [dispatch]);
 
+  const displayedTickets = showAllTickets
+    ? tickets
+    : tickets.slice(0, INITIAL_TICKETS_COUNT);
+  const hasMoreTickets = tickets.length > INITIAL_TICKETS_COUNT;
+
   useEffect(() => {
     updateScrollState();
     const el = scrollRef.current;
@@ -100,7 +107,7 @@ export default function TicketList() {
     ro.observe(el);
     ro.observe(wrap);
     return () => ro.disconnect();
-  }, [tickets.length, updateScrollState]);
+  }, [displayedTickets.length, updateScrollState]);
 
   const lineSvg =
     scrollState.trackHeight > 0
@@ -131,12 +138,21 @@ export default function TicketList() {
         onScroll={updateScrollState}
       >
         <ul className="ticket-list">
-          {tickets.map((ticket) => (
+          {displayedTickets.map((ticket) => (
             <li key={ticket.id}>
               <TicketCard ticket={ticket} />
             </li>
           ))}
         </ul>
+        {hasMoreTickets && !showAllTickets && (
+          <button
+            type="button"
+            className="ticket-list__load-more"
+            onClick={() => setShowAllTickets(true)}
+          >
+            Загрузить еще билеты
+          </button>
+        )}
       </div>
       <div
         className="ticket-list-track"
