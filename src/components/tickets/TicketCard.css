@@ -1,16 +1,20 @@
 .ticket-card {
+  box-sizing: border-box;
   background: #E8EBF2;
   color: #4E148C;
   margin: 10px 0px;
   padding: 30px;
   border-radius: 10px;
   padding-right: 0;
+  max-width: 100%;
+  overflow: hidden;
 }
 .ticket-card__header {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
   margin-bottom: 1rem;
+  gap: 0.5rem;
 }
 .ticket-card__price {
   font-weight: 700;
@@ -27,31 +31,36 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 0.5rem;
+  min-width: 0;
 }
 .ticket-card__segment {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
 }
 .ticket-card__label {
   color: #858AE3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .ticket-card__date {
   margin-top: 0.5rem;
   font-size: 0.9rem;
   color: #666;
 }
-.ticket-card__time{
+.ticket-card__time {
   font-weight: 500;
   color: #4E148C;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media (width <= 450px) {
-  .ticket-list-scroll{
-    padding: 0px;
-  }
-  /*чекаем отседа*/
   .ticket-card {
-    margin: 0.5rem 0px;
+    margin: 0.5rem 0;
     padding: 1rem;
   }
   .ticket-card__header {
@@ -61,7 +70,6 @@
   .ticket-card__price {
     font-size: 1.5rem;
   }
-  
   .ticket-card__logo {
     height: 1rem;
   }
@@ -72,7 +80,27 @@
     margin-top: 0.1rem;
     font-size: 0.9rem;
   }
-  .ticket-card__time{
+  .ticket-card__time {
     font-size: 0.8rem;
+  }
+}
+
+@media (width <= 360px) {
+  .ticket-card__route {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .ticket-card__header {
+    grid-template-columns: 1fr auto;
+  }
+  .ticket-card__header .ticket-card__price {
+    grid-column: 1;
+  }
+  .ticket-card__header .ticket-card__company {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .ticket-card__header span:nth-child(2) {
+    display: none;
   }
 }

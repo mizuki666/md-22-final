@@ -22,11 +22,11 @@
 }
 
 @media (width <= 375px) {
-    .header-plane-icon{
-        height: 15px;
-    }
-    .header-content{
-        margin-bottom: 0px;
-        margin-top: 5px;
-    }
+  .header-plane-icon {
+    height: 20px;
   }
+  .header-content {
+    margin-bottom: 0;
+    margin-top: 5px;
+  }
+}

@@ -85,11 +85,12 @@
 }
 
 @media (width <= 450px) {
-  .mobile-filters,
-  .mobile-filters__action,
   .mobile-filters__summary,
-  .mobile-filters__arrow{
-    font-size: 0.5rem
+  .mobile-filters__action {
+    font-size: 0.8rem;
+  }
+  .mobile-filters__arrow {
+    font-size: 0.7rem;
   }
   .mobile-filters__panel_open {
     padding-top: 0;
