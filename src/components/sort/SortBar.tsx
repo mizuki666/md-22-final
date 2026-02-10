@@ -5,9 +5,9 @@ import type { RootState } from '../../store';
 import './SortBar.css';
 
 const OPTIONS: { value: SortField; label: string }[] = [
-  { value: 'price', label: 'Цена' },
-  { value: 'duration', label: 'Время в пути' },
-  { value: 'connectionAmount', label: 'Пересадки' },
+  { value: 'price', label: 'Самый дешевый' },
+  { value: 'duration', label: 'Самый быстрый' },
+  { value: 'connectionAmount', label: 'Самый оптимальный' },
 ];
 
 export default function SortBar() {

@@ -128,3 +128,15 @@
 .ticket-list__load-more:active {
   opacity: 0.9;
 }
+
+@media (width <= 768px) {
+  .ticket-list-wrap{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    height: 80dvh;
+    min-height: 0;
+    overflow: visible;
+  }
+}

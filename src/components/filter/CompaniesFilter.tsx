@@ -21,7 +21,7 @@ export default function CompaniesFilter() {
   return (
     <div className="filter">
       <span className="filter__label">Компании</span>
-      <ul className="filter__list">
+      <ul className="filter__list" key={selectedCompany}>
         <li className="filter__item">
           <label className="filter__label-check">
             <input

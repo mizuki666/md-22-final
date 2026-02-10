@@ -16,22 +16,15 @@
     justify-content: space-between;
     gap: 0.5rem;
     padding: 0.75rem 1rem;
-    background: #E8EBF2;
-    border: 1px solid #d0d5dd;
+    background: #4E148C;
+    color: #F7F9F7;
     border-radius: 10px;
-    font: inherit;
-    color: inherit;
     cursor: pointer;
     text-align: left;
   }
 
-  .mobile-filters__trigger:hover {
-    background: #dfe2e9;
-  }
-
   .mobile-filters__summary {
     font-size: 0.9rem;
-    color: #374151;
   }
 
   .mobile-filters__action {
@@ -40,7 +33,6 @@
     gap: 0.25rem;
     font-weight: 600;
     font-size: 0.9rem;
-    color: #1f2937;
   }
 
   .mobile-filters__arrow {
@@ -50,7 +42,7 @@
   }
 
   .mobile-filters__arrow_open {
-    transform: rotate(180deg);
+    transform: rotate(-180deg);
   }
 
   .mobile-filters__panel {
@@ -71,7 +63,6 @@
   .mobile-filters__panel_open {
     max-height: 600px;
     opacity: 1;
-    margin-top: 0.75rem;
   }
 
   .mobile-filters__panel .filter {

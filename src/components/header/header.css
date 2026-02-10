@@ -3,6 +3,7 @@
     align-items: center;
     color: #4E148C;
     margin-bottom: 20px;
+    margin-top: 10px;
 }
 
 @media (width <= 768px) {

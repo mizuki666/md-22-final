@@ -1,14 +1,13 @@
 .app {
   display: flex;
   flex-direction: column;
-  height: 90dvh;
+  height: 100dvh;
 }
 
 #root {
   max-width: 1280px;
   width: 100%;
   margin: 0 auto;
-  padding: 1rem 2rem;
 }
 
 .main-content {
@@ -29,9 +28,13 @@
   height: fit-content;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
+  .app {
+    padding: 0px 10px;
+  }
   .main-content {
     flex-direction: column;
+    max-height: 90dvh;
   }
   .sidebar {
     display: none;
