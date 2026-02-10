@@ -17,6 +17,14 @@
 }
 .ticket-card__company {
   color: #666;
+  display: flex;
+  align-items: center;
+}
+.ticket-card__logo {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  display: block;
 }
 .ticket-card__route {
   display: grid;

@@ -1,4 +1,5 @@
 import type { Ticket } from '../../types/ticket';
+import { getCompanyLogo } from '../../constants/companyLogos';
 import './TicketCard.css';
 
 function formatStops(connectionAmount: number | null): string {
@@ -22,6 +23,7 @@ interface TicketCardProps {
 export default function TicketCard({ ticket }: TicketCardProps) {
   const { from, to, company, price, currency, time, duration, connectionAmount } =
     ticket;
+  const logo = getCompanyLogo(company);
 
   return (
     <article className="ticket-card">
@@ -29,7 +31,13 @@ export default function TicketCard({ ticket }: TicketCardProps) {
         <span className="ticket-card__price">
           {price.toLocaleString('ru-RU')} {currency}
         </span>
-        <span className="ticket-card__company">{company}</span>
+        <span className="ticket-card__company">
+          {logo ? (
+            <img src={logo} alt={company} className="ticket-card__logo" />
+          ) : (
+            company
+          )}
+        </span>
       </div>
       <div className="ticket-card__route">
         <div className="ticket-card__segment">
