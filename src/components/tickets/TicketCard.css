@@ -1,8 +1,8 @@
 .ticket-card {
   background: #E8EBF2;
   color: #4E148C;
-  margin: 20px 0px;
-  padding: 10px;
+  margin: 10px 0px;
+  padding: 30px;
   border-radius: 10px;
 }
 .ticket-card__header {
@@ -20,11 +20,12 @@
 }
 .ticket-card__route {
   display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 0.5rem;
 }
 .ticket-card__segment {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 }
 .ticket-card__label {
   color: #666;

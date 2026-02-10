@@ -25,18 +25,6 @@
   },
   {
     "id": 3,
-    "from": "MOW",
-    "to": "ALA",
-    "company": "Аэрофлот",
-    "price": 18500,
-    "currency": "RUB",
-    "time": { "startTime": "06:00", "endTime": "12:30" },
-    "duration": 390,
-    "date": "2025-03-16",
-    "connectionAmount": 1
-  },
-  {
-    "id": 4,
     "from": "LED",
     "to": "MOW",
     "company": "Победа",
@@ -48,19 +36,7 @@
     "connectionAmount": 0
   },
   {
-    "id": 5,
-    "from": "MOW",
-    "to": "SVX",
-    "company": "Уральские авиалинии",
-    "price": 8900,
-    "currency": "RUB",
-    "time": { "startTime": "08:30", "endTime": "12:50" },
-    "duration": 260,
-    "date": "2025-03-18",
-    "connectionAmount": 0
-  },
-  {
-    "id": 6,
+    "id": 4,
     "from": "MOW",
     "to": "KRR",
     "company": "S7 Airlines",
@@ -72,31 +48,7 @@
     "connectionAmount": 1
   },
   {
-    "id": 7,
-    "from": "SVX",
-    "to": "LED",
-    "company": "Уральские авиалинии",
-    "price": 7500,
-    "currency": "RUB",
-    "time": { "startTime": "07:15", "endTime": "11:00" },
-    "duration": 225,
-    "date": "2025-03-20",
-    "connectionAmount": 0
-  },
-  {
-    "id": 8,
-    "from": "MOW",
-    "to": "LED",
-    "company": "Аэрофлот",
-    "price": 6800,
-    "currency": "RUB",
-    "time": { "startTime": "22:00", "endTime": "23:40" },
-    "duration": 100,
-    "date": "2025-03-15",
-    "connectionAmount": 0
-  },
-  {
-    "id": 9,
+    "id": 5,
     "from": "LED",
     "to": "ALA",
     "company": "S7 Airlines",
@@ -108,7 +60,7 @@
     "connectionAmount": 2
   },
   {
-    "id": 10,
+    "id": 6,
     "from": "MOW",
     "to": "KRR",
     "company": "Победа",
@@ -120,7 +72,7 @@
     "connectionAmount": 1
   },
   {
-    "id": 11,
+    "id": 7,
     "from": "MOW",
     "to": "SVX",
     "company": "Red Wings",
@@ -132,7 +84,7 @@
     "connectionAmount": 0
   },
   {
-    "id": 12,
+    "id": 8,
     "from": "KRR",
     "to": "MOW",
     "company": "S7 Airlines",
@@ -144,7 +96,7 @@
     "connectionAmount": 1
   },
   {
-    "id": 13,
+    "id": 9,
     "from": "MOW",
     "to": "LED",
     "company": "Red Wings",
@@ -156,31 +108,7 @@
     "connectionAmount": 0
   },
   {
-    "id": 14,
-    "from": "ALA",
-    "to": "MOW",
-    "company": "Аэрофлот",
-    "price": 19800,
-    "currency": "RUB",
-    "time": { "startTime": "02:00", "endTime": "08:20" },
-    "duration": 380,
-    "date": "2025-03-24",
-    "connectionAmount": 1
-  },
-  {
-    "id": 15,
-    "from": "LED",
-    "to": "SVX",
-    "company": "Уральские авиалинии",
-    "price": 8100,
-    "currency": "RUB",
-    "time": { "startTime": "12:00", "endTime": "16:45" },
-    "duration": 285,
-    "date": "2025-03-25",
-    "connectionAmount": 0
-  },
-  {
-    "id": 16,
+    "id": 10,
     "from": "MOW",
     "to": "LED",
     "company": "Победа",
@@ -192,7 +120,7 @@
     "connectionAmount": null
   },
   {
-    "id": 17,
+    "id": 11,
     "from": "SVX",
     "to": "MOW",
     "company": "Red Wings",
@@ -204,7 +132,7 @@
     "connectionAmount": 0
   },
   {
-    "id": 18,
+    "id": 12,
     "from": "MOW",
     "to": "ALA",
     "company": "S7 Airlines",
@@ -214,29 +142,5 @@
     "duration": 570,
     "date": "2025-03-27",
     "connectionAmount": 2
-  },
-  {
-    "id": 19,
-    "from": "KRR",
-    "to": "LED",
-    "company": "Уральские авиалинии",
-    "price": 9200,
-    "currency": "RUB",
-    "time": { "startTime": "06:20", "endTime": "12:10" },
-    "duration": 350,
-    "date": "2025-03-28",
-    "connectionAmount": 1
-  },
-  {
-    "id": 20,
-    "from": "LED",
-    "to": "MOW",
-    "company": "Аэрофлот",
-    "price": 7100,
-    "currency": "RUB",
-    "time": { "startTime": "11:30", "endTime": "13:10" },
-    "duration": 100,
-    "date": "2025-03-29",
-    "connectionAmount": 0
   }
 ]

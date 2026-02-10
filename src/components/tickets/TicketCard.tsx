@@ -20,7 +20,7 @@ interface TicketCardProps {
 }
 
 export default function TicketCard({ ticket }: TicketCardProps) {
-  const { from, to, company, price, currency, time, duration, date, connectionAmount } =
+  const { from, to, company, price, currency, time, duration, connectionAmount } =
     ticket;
 
   return (
@@ -47,7 +47,6 @@ export default function TicketCard({ ticket }: TicketCardProps) {
           <span className="ticket-card__time">{formatStops(connectionAmount)}</span>
         </div>
       </div>
-      <div className="ticket-card__date">{date}</div>
     </article>
   );
 }

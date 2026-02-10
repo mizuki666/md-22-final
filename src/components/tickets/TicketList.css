@@ -1,10 +1,95 @@
+/* Обёртка: скролл слева, трек (линия) справа */
+.ticket-list-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  height: 680px;
+  min-height: 0;
+}
+
+/* Область прокрутки карточек */
+.ticket-list-scroll {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    white 16px,
+    white calc(100% - 16px),
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    white 16px,
+    white calc(100% - 16px),
+    transparent
+  );
+  padding: 0.75rem 0 0.5rem;
+}
+
+.ticket-list-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Трек справа */
+.ticket-list-track {
+  position: relative;
+  flex-shrink: 0;
+  width: 12px;
+  height: 100%;
+  margin-left: 1rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.5rem;
+  box-sizing: border-box;
+  mask-size: 12px 100%;
+  mask-repeat: no-repeat;
+  mask-position: 0 0;
+  -webkit-mask-size: 12px 100%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: 0 0;
+}
+
+/* Линия — один рисунок на всю высоту трека (фон трека) */
+.ticket-list-track-line {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* Подкрашенный сегмент: двигается при прокрутке */
+.ticket-list-thumb {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: var(--fd-top, 0);
+  height: var(--fd-height, 0);
+  background: var(--fd-primary, #4E148C);
+  transition: top 0.1s ease-out, height 0.1s ease-out;
+  border-radius: 2px;
+  box-shadow: 20px #4E148C;
+}
+
+.ticket-list-thumb[data-hidden='true'] {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .ticket-list {
   list-style: none;
   margin: 0;
   padding: 0;
-  max-height: 75dvh;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
+
 .ticket-list_loading,
 .ticket-list_error,
 .ticket-list_empty {
@@ -12,6 +97,7 @@
   text-align: center;
   color: #666;
 }
+
 .ticket-list_error {
   color: #c00;
 }
