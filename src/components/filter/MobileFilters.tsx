@@ -28,7 +28,7 @@ export default function MobileFilters() {
   const summary = getSummary(stopsFilter, companiesFilter);
 
   return (
-    <div className="mobile-filters">
+    <div className={`mobile-filters ${open ? 'mobile-filters_open' : ''}`}>
       <button
         type="button"
         className="mobile-filters__trigger"

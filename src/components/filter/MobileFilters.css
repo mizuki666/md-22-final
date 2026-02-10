@@ -6,6 +6,9 @@
   .mobile-filters {
     display: block;
     margin-bottom: 1rem;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #4E148C;
   }
 
   .mobile-filters__trigger {
@@ -21,6 +24,12 @@
     border-radius: 10px;
     cursor: pointer;
     text-align: left;
+    border: none;
+    transition: border-radius 0.2s ease;
+  }
+
+  .mobile-filters_open .mobile-filters__trigger {
+    border-radius: 10px 10px 0 0;
   }
 
   .mobile-filters__summary {
@@ -46,23 +55,22 @@
   }
 
   .mobile-filters__panel {
-    position: absolute;
     overflow: hidden;
-    display: flex;
+    display: block;
     width: 100%;
     background: #4E148C;
     max-height: 0;
     opacity: 0;
-    transition: max-height 0.3s ease, opacity 0.2s ease, margin 0.2s ease;
-    margin-top: 0;
-    z-index: 100;
-    flex: 1;
+    transition: max-height 0.3s ease, opacity 0.2s ease;
     color: #F7F9F7;
+    padding: 0 1rem 1rem;
+    box-sizing: border-box;
   }
 
   .mobile-filters__panel_open {
     max-height: 600px;
     opacity: 1;
+    padding-top: 0.5rem;
   }
 
   .mobile-filters__panel .filter {

@@ -130,7 +130,7 @@
 }
 
 @media (width <= 768px) {
-  .ticket-list-wrap{
+  .ticket-list-wrap {
     position: relative;
     display: flex;
     flex-direction: row;
@@ -138,5 +138,17 @@
     height: 80dvh;
     min-height: 0;
     overflow: visible;
+  }
+
+  /* Убираем mask на мобильных — при добавлении контента (Загрузить еще) маска может давать размытие текста */
+  .ticket-list-scroll {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
+  .ticket-list .ticket-card,
+  .ticket-list li {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
