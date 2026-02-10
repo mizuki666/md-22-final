@@ -4,3 +4,18 @@
     color: #4E148C;
     margin-bottom: 20px;
 }
+
+@media (width <= 768px) {
+    .header-content{
+        display: flex;
+        color: #4E148C;
+        margin-bottom: 5px;
+        justify-content: center;
+    }
+    .header-plane-icon{
+        height: 30px;
+    }
+    .header-text {
+        display: none;
+    }
+}
