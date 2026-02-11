@@ -3,12 +3,13 @@
   background: #E8EBF2;
   color: #4E148C;
   margin: 10px 0px;
-  padding: 30px;
+  padding: 15px;
   border-radius: 10px;
   padding-right: 0;
   max-width: 100%;
   overflow: hidden;
 }
+
 .ticket-card__header {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -16,13 +17,14 @@
   margin-bottom: 1rem;
   gap: 0.5rem;
 }
+
 .ticket-card__price {
   font-weight: 700;
-  font-size: 2rem;
+  font-size: 1.4rem;
 }
 
 .ticket-card__logo {
-  height: 28px;
+  height: 24px;
   width: auto;
   object-fit: contain;
   display: block;
@@ -58,7 +60,7 @@
   white-space: nowrap;
 }
 
-@media (width <= 555px) {
+@media (width <= 1000px) {
   .ticket-card {
     margin: 0.5rem 0;
     padding: 1rem;
@@ -87,7 +89,7 @@
 
 @media (width <= 360px) {
   .ticket-card__route {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 0.5rem;
   }
   .ticket-card__header {

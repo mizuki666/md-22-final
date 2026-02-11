@@ -1,10 +1,10 @@
-/* Обёртка: скролл слева, трек (линия) справа */
+/* Обертка: скролл слева, трек (линия) справа */
 .ticket-list-wrap {
   position: relative;
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  height: 680px;
+  height: 75vh;
   min-height: 0;
   overflow: visible;
 }

@@ -2,10 +2,16 @@
     display: flex;
     align-items: center;
     color: #4E148C;
-    margin-bottom: 20px;
-    margin-top: 10px;
+    margin: 5px 0px;
 }
 
+.header-plane-icon{
+    height: 4rem;
+}
+.header-text{
+    font-size: 1.2rem;
+    font-weight: bold;
+}
 @media (width <= 1000px) {
     .header-content{
         display: flex;
@@ -14,7 +20,7 @@
         justify-content: center;
     }
     .header-plane-icon{
-        height: 30px;
+        height: 20px;
     }
     .header-text {
         display: none;

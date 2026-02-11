@@ -13,7 +13,6 @@ const X_LEFT = 1;
 const X_RIGHT = 11;
 const Y_START = 12;
 
-/** Точки ступенчатой линии от 0 до height (как в Fumadocs) */
 function getSteppedPathPoints(height: number): [number, number][] {
   const points: [number, number][] = [];
   let x = X_LEFT;
@@ -34,7 +33,7 @@ function getSteppedPathPoints(height: number): [number, number][] {
   return points;
 }
 
-/** Генерирует SVG пути ступенчатой линии (как в Fumadocs) для любой высоты */
+/** Генерирует SVG пути ступенчатой линии*/
 function buildTocLineSvg(height: number): string {
   const points = getSteppedPathPoints(height);
   const d = 'M' + points.map(([px, py]) => `${px} ${py}`).join(' L');
@@ -98,9 +97,8 @@ export default function TicketList() {
     : tickets.slice(0, INITIAL_TICKETS_COUNT);
   const hasMoreTickets = tickets.length > INITIAL_TICKETS_COUNT;
 
-  // Используем useLayoutEffect вместо useEffect для синхронных обновлений DOM
+
   useLayoutEffect(() => {
-    // Обернем вызов в requestAnimationFrame для асинхронности
     const rafId = requestAnimationFrame(() => {
       updateScrollState();
     });
@@ -110,7 +108,6 @@ export default function TicketList() {
     if (!el || !wrap) return;
     
     const ro = new ResizeObserver(() => {
-      // И здесь тоже используем requestAnimationFrame
       requestAnimationFrame(() => {
         updateScrollState();
       });
@@ -125,7 +122,6 @@ export default function TicketList() {
     };
   }, [displayedTickets.length, updateScrollState]);
 
-  // Также обновим обработчик scroll события
   const handleScroll = useCallback(() => {
     requestAnimationFrame(() => {
       updateScrollState();
@@ -158,7 +154,7 @@ export default function TicketList() {
       <div
         className="ticket-list-scroll"
         ref={scrollRef}
-        onScroll={handleScroll} // Используем обернутый обработчик
+        onScroll={handleScroll}
       >
         <ul className="ticket-list">
           {displayedTickets.map((ticket) => (
